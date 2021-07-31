@@ -11,10 +11,6 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-          - .
       # Download and cache dependencies
       - restore_cache:
           keys:
