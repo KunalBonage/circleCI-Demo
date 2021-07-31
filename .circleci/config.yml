@@ -7,7 +7,7 @@ jobs:
   # Sample build task
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: cimg/node:15.1
     steps:
       - checkout
       # Download and cache dependencies
@@ -27,7 +27,7 @@ jobs:
   # Deploy with Surge task
   deploy:
     docker:
-      - image: circleci/node:7.10
+      - image: cimg/node:15.1
     steps:
       - checkout
       - run: npm install surge
