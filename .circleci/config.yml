@@ -11,6 +11,10 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+          - .
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -28,8 +32,11 @@ jobs:
     docker:
       - image: cimg/node:15.1
     steps:
-      - attach_workspace:
-          at: ~/project
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+          - .
+      - node_modules
       - run: npm install surge
       - run: ls -l
       - run: ~/project/node_modules/surge/lib/cli.js --project ~/project/build --domain testCI.surge.sh
