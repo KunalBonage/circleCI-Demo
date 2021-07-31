@@ -29,8 +29,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm test
   deploy:
-      docker:
+    docker:
       - image: cimg/node:15.1
+    steps:
       - attach_workspace:
           at: ~/project
       - run: npm install surge
