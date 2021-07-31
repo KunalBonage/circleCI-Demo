@@ -31,7 +31,8 @@ jobs:
     steps:
       - checkout
       - run: npm install surge
-      - run: ~/project/node_modules/surge/lib/cli.js --project ~/project/build --domain testCI.surge.sh
+      - run: ls -l
+      - run: /home/circleci/build/node_modules/surge/lib/cli.js --project /home/circleci/build/build --domain testCI.surge.sh
 workflows:
   version: 2
   build-and-deploy:
