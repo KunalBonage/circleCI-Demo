@@ -12,6 +12,7 @@ orbs:
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
   build-and-test:  
+    working_directory: ~/react-app
     # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/node
@@ -30,7 +31,18 @@ jobs:
       #     pkg-manager: yarn 
       - run:
           name: Run tests
-          command: npm test
+          command: npm test && 
+      - run:
+          name: Run build
+          command: npm run build
+      - run:
+          name: install surge
+          command: npm install surge --g
+      - deploy-surge:
+          production:
+          branch: master
+          commands:
+            - surge --project ~/react-app/build --domain test.now.surge.sh
 
 workflows:
   # Below is the definition of your workflow.
