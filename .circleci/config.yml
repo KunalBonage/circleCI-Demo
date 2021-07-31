@@ -38,13 +38,8 @@ jobs:
       - run:
           name: install surge
           command: npm install surge --g
-  deploy-surge:
-    docker:
-      - image: cimg/node:15.1
-    steps:
-      production:
-      branch: master
-      command:
+      - deploy:
+          command: | 
         - surge --project ~/react-app/build --domain test.now.surge.sh
 
 workflows:
