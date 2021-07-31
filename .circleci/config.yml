@@ -8,9 +8,9 @@ jobs:
   build:
     docker:
       - image: cimg/node:15.1
+    working_directory: ~/project
     steps:
       - checkout
-    working_directory: ~/project
       - persist_to_workspace:
           root: ~/project
           paths:
