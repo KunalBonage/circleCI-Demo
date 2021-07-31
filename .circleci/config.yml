@@ -30,7 +30,7 @@ jobs:
       - image: cimg/node:15.1
     steps:
       - checkout
-      - run: npm install surge
+      - run: npm install surge --g
       - run: surge --project ~/project/build --domain inconclusive-transport.surge.sh
 workflows:
   version: 2
