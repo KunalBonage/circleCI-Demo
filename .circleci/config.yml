@@ -11,10 +11,6 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-          - "*"
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -28,6 +24,10 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm run build
       - run: npm test
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+          - "*"
   deploy:
     docker:
       - image: cimg/node:15.1
