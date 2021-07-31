@@ -28,7 +28,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm test
-    deploy:
+  deploy:
       - attach_workspace:
           at: ~/project
       - run: npm install surge
