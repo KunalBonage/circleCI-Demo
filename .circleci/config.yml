@@ -38,11 +38,11 @@ jobs:
       - run:
           name: install surge
           command: npm install surge --g
-      - deploy-surge:
-          production:
-          branch: master
-          commands:
-            - surge --project ~/react-app/build --domain test.now.surge.sh
+  deploy-surge:
+      production:
+      branch: master
+      commands:
+        - surge --project ~/react-app/build --domain test.now.surge.sh
 
 workflows:
   # Below is the definition of your workflow.
@@ -52,5 +52,6 @@ workflows:
   sample: 
     jobs:
       - build-and-test
+      - deploy-surge
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
       # - node/test
