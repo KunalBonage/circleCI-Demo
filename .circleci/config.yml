@@ -24,7 +24,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       # run placeholder test
       - run: npm test
-      - run: npm build
+      - run: npm run build
       - run: npm install surge
       - run: ls -l
       - run: ./node_modules/surge/lib/cli.js --project ./build --domain testCI.surge.sh
