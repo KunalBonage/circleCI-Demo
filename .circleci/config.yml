@@ -9,7 +9,7 @@ jobs:
     docker:
       - image: cimg/node:15.1
     parameters: # parameters are at the job level
-      envv:
+      org_name:
         type: string
         default: "qa"
     working_directory: ~/project
@@ -30,7 +30,7 @@ jobs:
       - run: npm test
       - run:
           name: current environment check
-          command: echo << parameters.envv >>
+          command: echo << parameters.org_name >>
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -39,7 +39,7 @@ jobs:
     docker:
       - image: cimg/node:15.1
     parameters: # parameters are at the job level
-      envv:
+      org_name:
         type: string
         default: "qa"
     steps:
@@ -52,7 +52,9 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - build:
+          org_name: my_organization
+          repo_name: project1
       - deploy:
           requires:
             - build
