@@ -53,8 +53,8 @@ workflows:
   build-deploy:
     jobs:
       - build:
-          name: test
-          env: test
+          name: ooo
+          env: ooo
       - deploy:
           filters:
             branches:
