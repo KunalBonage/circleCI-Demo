@@ -39,7 +39,7 @@ jobs:
     docker:
       - image: cimg/node:15.1
     parameters: # parameters are at the job level
-      env:
+      envv:
         type: string
         default: "qa"
     steps:
