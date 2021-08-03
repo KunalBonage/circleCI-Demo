@@ -66,7 +66,7 @@ workflows:
           env: prod
       - deploy:
           requires: 
-            - "prod"
+            - prod
           filters:
             branches:
               only: master
