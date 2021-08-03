@@ -56,17 +56,15 @@ workflows:
           env: 'stage' 
       - deploy:
           requires:
-            - build
+            - build<< parameters.env >>
           filters:
             branches:
               only: staging
-  build-deploy:
-    jobs:
       - build:
           env: 'prod' 
       - deploy:
           requires:
-            - build
+            - build<< parameters.env >>
           filters:
             branches:
               only: master
