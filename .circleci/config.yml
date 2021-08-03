@@ -1,59 +1,29 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
-version: 2
+version: 2.1
+
 jobs:
-  # Sample build task
-  build:
-    parameters: # parameters are at the job level
-      org_name:
-              type: string
-              default: "qa"
+  hello:
+    parameters:
+      env:
+        type: string
     docker:
-      - image: cimg/node:15.1
-    working_directory: ~/project
+      - image: circleci/clojure:lein-2.9.1
     steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run: npm install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run build
-      - run: npm test
-      - run:
-          name: current environment check
-          command: echo << parameters.org_name >>
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-          - "*"
-  deploy:
-    docker:
-      - image: cimg/node:15.1
-    steps:
-      - attach_workspace:
-          at: .
-      - run: npm install surge
-      - run: ls -l
-      - run: ~/project/node_modules/surge/lib/cli.js --project ~/project/build --domain testCI.surge.sh
+      - run: echo hi from << parameters.env >>
+
 workflows:
   version: 2
-  build-deploy:
+  ci-and-deploy:
     jobs:
-      - build:
-          org_name: my_organization
-          repo_name: project1
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: staging
+      - hello:
+          name: hello-ci
+          env: ci
+
+      - hello:
+          name: hello-test
+          env: test
+          requires: [hello-ci]
+
+      - hello:
+          name: hello-prod
+          env: prod
+          requires: [hello-test]
