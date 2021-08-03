@@ -52,10 +52,10 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build:
-          name: ooo
-          env: ooo
+      - build
       - deploy:
+          requires:
+            - build
           filters:
             branches:
               only: staging
