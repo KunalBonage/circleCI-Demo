@@ -56,17 +56,6 @@ workflows:
           name: stage
           env: stage
       - deploy:
-          requires:
-               - stage
           filters:
             branches:
               only: staging
-      - build:
-          name: prod
-          env: prod
-      - deploy:
-          requires:
-              - prod
-          filters:
-            branches:
-              only: master
