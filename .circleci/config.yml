@@ -53,6 +53,7 @@ workflows:
   build-deploy:
     jobs:
       - build
+          env: ttt
       - deploy:
           requires:
             - build
