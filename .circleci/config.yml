@@ -6,12 +6,12 @@ version: 2
 jobs:
   # Sample build task
   build:
-    docker:
-      - image: cimg/node:15.1
     parameters: # parameters are at the job level
       org_name:
               type: string
               default: "qa"
+    docker:
+      - image: cimg/node:15.1
     working_directory: ~/project
     steps:
       - checkout
@@ -38,10 +38,6 @@ jobs:
   deploy:
     docker:
       - image: cimg/node:15.1
-    parameters: # parameters are at the job level
-      org_name:
-              type: string
-              default: "qa"
     steps:
       - attach_workspace:
           at: .
