@@ -30,7 +30,7 @@ jobs:
       - run: npm test
       - run:
           name: current environment check
-          command: echo << parameters.env >>
+          command: echo << parameters.envv >>
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -53,7 +53,7 @@ workflows:
   build-deploy:
     jobs:
       - build:
-          env: ttt
+          envv: 'ttt'
       - deploy:
           requires:
             - build
