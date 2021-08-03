@@ -1,19 +1,58 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
 version: 2.1
-
 jobs:
-  hello:
-    parameters:
-      env:
+  # Sample build task
+  build:
+    parameters: # parameters are at the job level
+      org_name:
         type: string
     docker:
-      - image: circleci/clojure:lein-2.9.1
+      - image: cimg/node:15.1
+    working_directory: ~/project
     steps:
-      - run: echo hi from << parameters.env >>
-
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: npm run build
+      - run: npm test
+      - run:
+          name: current environment check
+          command: echo << parameters.org_name >>
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+          - "*"
+  deploy:
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - attach_workspace:
+          at: .
+      - run: npm install surge
+      - run: ls -l
+      - run: ~/project/node_modules/surge/lib/cli.js --project ~/project/build --domain testCI.surge.sh
 workflows:
   version: 2
-  ci-and-deploy:
+  build-deploy:
     jobs:
-      - hello:
-          name: hello-ci
-          env: ci
+      - build:
+          org_name: my_organization
+          repo_name: project1
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: staging
