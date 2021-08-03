@@ -17,13 +17,3 @@ workflows:
       - hello:
           name: hello-ci
           env: ci
-
-      - hello:
-          name: hello-test
-          env: test
-          requires: [hello-ci]
-
-      - hello:
-          name: hello-prod
-          env: prod
-          requires: [hello-test]
