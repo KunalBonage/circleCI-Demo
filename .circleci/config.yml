@@ -49,7 +49,6 @@ workflows:
     jobs:
       - build:
           org_name: my_organization
-          repo_name: project1
       - deploy:
           requires:
             - build
