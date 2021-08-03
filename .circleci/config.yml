@@ -10,8 +10,8 @@ jobs:
       - image: cimg/node:15.1
     parameters: # parameters are at the job level
       org_name:
-        type: string
-        default: "qa"
+              type: string
+              default: "qa"
     working_directory: ~/project
     steps:
       - checkout
@@ -40,8 +40,8 @@ jobs:
       - image: cimg/node:15.1
     parameters: # parameters are at the job level
       org_name:
-        type: string
-        default: "qa"
+              type: string
+              default: "qa"
     steps:
       - attach_workspace:
           at: .
