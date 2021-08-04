@@ -61,7 +61,7 @@ workflows:
               only: staging          
       - build:
           name: build-prod
-          env: prod
+          env: production
           filters:
             branches:
               only: master          
