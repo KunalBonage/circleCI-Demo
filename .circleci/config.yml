@@ -55,7 +55,7 @@ workflows:
     jobs:
       - build:
           env: staging
-       - build:
+      - build:
           env: prod
       - deploy:
           env: staging
