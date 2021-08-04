@@ -25,7 +25,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run build
+      - run: ~/project/node_modules/.bin/env-cmd -f .env.<<parameters.env>> npm run build
       - run: npm test
       - run:
           name: current environment check
@@ -75,7 +75,7 @@ workflows:
               only: staging
       - deploy:
           name: deploy-prod        
-          env: prod
+          env: production
           requires:
             - build-prod
           filters:
