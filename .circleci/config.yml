@@ -53,6 +53,7 @@ workflows:
       - build:
           env: staging
       - deploy:
+          env: staging
           requires:
             - build
           filters:
