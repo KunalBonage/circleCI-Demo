@@ -56,7 +56,7 @@ workflows:
       - build:
           env: staging
        - build:
-          env: prod  
+          env: prod
       - deploy:
           env: staging
           requires:
