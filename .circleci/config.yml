@@ -2,10 +2,13 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+version: 2.1
 jobs:
   # Sample build task
   build:
+    parameters: # parameters are at the job level
+      env:
+        type: string
     docker:
       - image: cimg/node:15.1
     working_directory: ~/project
@@ -22,13 +25,22 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run build
+      - run: ~/project/node_modules/.bin/env-cmd -f .env.<<parameters.env>> npm run build
       - run: npm test
+      - run:
+          name: current environment check
+          command: echo << parameters.env >>
+      - run: # print the name of the branch we're on
+          name: "branch name"
+          command: echo ${CIRCLE_BRANCH}
       - persist_to_workspace:
           root: ~/project
           paths:
           - "*"
   deploy:
+    parameters: # parameters are at the job level
+      env:
+        type: string
     docker:
       - image: cimg/node:15.1
     steps:
@@ -36,15 +48,36 @@ jobs:
           at: .
       - run: npm install surge
       - run: ls -l
-      - run: ~/project/node_modules/surge/lib/cli.js --project ~/project/build --domain testCI.surge.sh
+      - run: ~/project/node_modules/.bin/surge --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - build:
+          name: build-staging
+          env: staging
+          filters:
+            branches:
+              only: staging          
+      - build:
+          name: build-prod
+          env: production
+          filters:
+            branches:
+              only: master          
       - deploy:
+          name: deploy-staging        
+          env: staging
           requires:
-            - build
+            - build-staging
+          filters:
+            branches:
+              only: staging
+      - deploy:
+          name: deploy-prod        
+          env: production
+          requires:
+            - build-prod
           filters:
             branches:
               only: master
