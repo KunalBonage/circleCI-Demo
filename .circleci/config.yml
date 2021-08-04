@@ -56,9 +56,15 @@ workflows:
       - build:
           name: staging
           env: staging
+          filters:
+            branches:
+              only: staging          
       - build:
           name: prod
           env: prod
+          filters:
+            branches:
+              only: master          
       - deploy:
           name: staging        
           env: staging
