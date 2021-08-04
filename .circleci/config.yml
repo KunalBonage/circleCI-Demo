@@ -35,6 +35,9 @@ jobs:
           paths:
           - "*"
   deploy:
+    parameters: # parameters are at the job level
+      env:
+        type: string
     docker:
       - image: cimg/node:15.1
     steps:
