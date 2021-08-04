@@ -48,7 +48,7 @@ jobs:
           at: .
       - run: npm install surge
       - run: ls -l
-      - run: ~/project/node_modules/bin/surge.cmd --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
+      - run: ~/project/node_modules/.bin/surge.cmd --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
 workflows:
   version: 2
   build-deploy:
