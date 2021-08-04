@@ -54,28 +54,22 @@ workflows:
   build-deploy:
     jobs:
       - build:
-          env:
-            name: staging
-            value: staging
+          name: staging
+          env: staging
       - build:
-          env:        
-            name: staging
-            value: staging
+          name: staging
+          env: prod
       - deploy:
-          env:        
-            name: prod
-            value: prod
+          env: staging
           requires:
-            - build<< parameters.env >>
+            - staging
           filters:
             branches:
               only: staging
       - deploy:
-          env:        
-            name: prod
-            value: prod
+          env: prod
           requires:
-            - build<< parameters.env >>
+            - prod
           filters:
             branches:
               only: master
