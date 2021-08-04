@@ -30,6 +30,9 @@ jobs:
       - run:
           name: current environment check
           command: echo << parameters.env >>
+      - run: # print the name of the branch we're on
+          name: "branch name"
+          command: echo ${CIRCLE_BRANCH}
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -45,17 +48,36 @@ jobs:
           at: .
       - run: npm install surge
       - run: ls -l
-      - run: ~/project/node_modules/surge/lib/cli.js --project ~/project/build --domain testCI<< parameters.env >>.surge.sh
+      - run: ~/project/node_modules/surge/lib/cli.js --project ~/project/build --domain testCI.<< parameters.env >>.surge.sh
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build:
+          name: staging
           env: staging
+          filters:
+            branches:
+              only: staging          
+      - build:
+          name: prod
+          env: prod
+          filters:
+            branches:
+              only: master          
       - deploy:
+          name: staging        
           env: staging
           requires:
-            - build
+            - staging
           filters:
             branches:
               only: staging
+      - deploy:
+          name: prod        
+          env: prod
+          requires:
+            - prod
+          filters:
+            branches:
+              only: master
