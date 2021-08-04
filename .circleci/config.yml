@@ -57,9 +57,10 @@ workflows:
           name: staging
           env: staging
       - build:
-          name: staging
+          name: prod
           env: prod
       - deploy:
+          name: staging        
           env: staging
           requires:
             - staging
@@ -67,6 +68,7 @@ workflows:
             branches:
               only: staging
       - deploy:
+          name: prod        
           env: prod
           requires:
             - prod
