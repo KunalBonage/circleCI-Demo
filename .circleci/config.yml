@@ -9,6 +9,8 @@ jobs:
     parameters: # parameters are at the job level
       env:
         type: string
+      name:
+        type: string
     docker:
       - image: cimg/node:15.1
     working_directory: ~/project
@@ -40,6 +42,8 @@ jobs:
   deploy:
     parameters: # parameters are at the job level
       env:
+        type: string
+      name:
         type: string
     docker:
       - image: cimg/node:15.1
