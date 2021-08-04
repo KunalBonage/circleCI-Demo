@@ -9,8 +9,6 @@ jobs:
     parameters: # parameters are at the job level
       env:
         type: string
-      name:
-        type: string
     docker:
       - image: cimg/node:15.1
     working_directory: ~/project
@@ -43,8 +41,6 @@ jobs:
     parameters: # parameters are at the job level
       env:
         type: string
-      name:
-        type: string
     docker:
       - image: cimg/node:15.1
     steps:
@@ -58,22 +54,28 @@ workflows:
   build-deploy:
     jobs:
       - build:
-          name: staging
-          env: staging
+          env:
+            name: staging
+            value: staging
       - build:
-          name: staging
-          env: prod
+          env:        
+            name: staging
+            value: staging
       - deploy:
-          env: staging
+          env:        
+            name: prod
+            value: prod
           requires:
-            - build<< parameters.name >>
+            - build<< parameters.env >>
           filters:
             branches:
               only: staging
       - deploy:
-          env: prod
+          env:        
+            name: prod
+            value: prod
           requires:
-            - build<< parameters.name >>
+            - build<< parameters.env >>
           filters:
             branches:
               only: master
