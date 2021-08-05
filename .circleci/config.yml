@@ -3,6 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@3.0.0
 jobs:
   # Sample build task
   build:
@@ -48,7 +50,11 @@ jobs:
           at: .
       - run: npm install surge
       - run: ls -l
-      - run: ~/project/node_modules/.bin/surge --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
+      - aws-s3/copy:
+          arguments: '--recursive'
+          from: ~/project/build
+          to: 's3://react-app-deployments'
+      # - run: ~/project/node_modules/.bin/surge --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
 workflows:
   version: 2
   build-deploy:
