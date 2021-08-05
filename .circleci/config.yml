@@ -50,7 +50,7 @@ jobs:
           at: .
       - run: npm install surge
       - run: ls -l
-    - aws-s3/copy:
+      - aws-s3/copy:
           arguments: '--recursive'
           from: ~/project/build
           to: 's3://react-app-deployments'
