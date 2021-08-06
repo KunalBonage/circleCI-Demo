@@ -54,6 +54,9 @@ jobs:
           arguments: '--recursive'
           from: ~/project/build
           to: 's3://react-app-deployments'
+      - run: 
+          name: Invalidate Cloudfront Cache
+          command: aws cloudfront create-invalidation --distribution-id {AWS_CLOUDFRONT__DISTRIBUTION_ID} --paths /\*
       # - run: ~/project/node_modules/.bin/surge --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
 workflows:
   version: 2
