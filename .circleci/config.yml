@@ -115,4 +115,4 @@ workflows:
               branches:
                 ignore: /.*/
               tags: 
-                only: /^staging-release*/
+                only: /^staging-release.*/
