@@ -114,7 +114,7 @@ workflows:
           name: staging-release       
           env: production
           requires:
-            - build-staging-release
+            - hold
           filters:
               branches:
                 ignore: /.*/
