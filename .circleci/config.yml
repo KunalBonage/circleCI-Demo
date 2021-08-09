@@ -89,7 +89,7 @@ workflows:
       - hold:
           type: approval
           requires:
-            - build-staging-release
+            - build-prod
       - deploy:
           name: deploy-staging        
           env: staging
@@ -104,7 +104,7 @@ workflows:
           name: deploy-prod        
           env: production
           requires:
-            - build-prod
+            - hold
           filters:
             branches:
               only: master
@@ -115,7 +115,6 @@ workflows:
           env: production
           requires:
             - build-staging-release
-            - hold
           filters:
               branches:
                 ignore: /.*/
