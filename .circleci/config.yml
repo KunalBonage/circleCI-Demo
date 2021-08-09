@@ -54,6 +54,9 @@ jobs:
           arguments: '--recursive'
           from: ~/project/build
           to: 's3://react-app-deployments'
+      - run: 
+          name: Invalidate Cloudfront Cache
+          command: aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT__DISTRIBUTION_ID} --paths /\*
       # - run: ~/project/node_modules/.bin/surge --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
 workflows:
   version: 2
@@ -64,13 +67,25 @@ workflows:
           env: staging
           filters:
             branches:
-              only: staging          
+              only: staging
+            tags:
+              ignore: /.*/       
       - build:
           name: build-prod
           env: production
           filters:
             branches:
-              only: master          
+              only: master
+            tags:
+              ignore: /.*/ 
+      - build:
+          name: build-staging-release
+          env: production
+          filters:
+            branches:
+              ignore: /.*/                        
+            tags:
+              only: /^staging-release*/
       - deploy:
           name: deploy-staging        
           env: staging
@@ -79,6 +94,8 @@ workflows:
           filters:
             branches:
               only: staging
+            tags:
+              ignore: /.*/
       - deploy:
           name: deploy-prod        
           env: production
@@ -87,3 +104,15 @@ workflows:
           filters:
             branches:
               only: master
+            tags:
+              ignore: /.*/
+      - deploy:
+          name: staging-release       
+          env: production
+          requires:
+            - build-staging-release
+          filters:
+              branches:
+                ignore: /.*/
+              tags: 
+                only: /^staging-release*/
