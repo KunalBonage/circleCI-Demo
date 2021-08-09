@@ -86,10 +86,14 @@ workflows:
               ignore: /.*/                        
             tags:
               only: /^staging-release.*/
-      - hold:
+      - hold-prod:
           type: approval
           requires:
             - build-prod
+      - hold-staging-release:
+          type: approval
+          requires:
+            - build-staging-release
       - deploy:
           name: deploy-staging        
           env: staging
@@ -104,7 +108,7 @@ workflows:
           name: deploy-prod        
           env: production
           requires:
-            - hold
+            - hold-prod
           filters:
             branches:
               only: master
@@ -114,7 +118,7 @@ workflows:
           name: staging-release       
           env: production
           requires:
-            - build-staging-release
+            - hold-staging-release
           filters:
               branches:
                 ignore: /.*/
