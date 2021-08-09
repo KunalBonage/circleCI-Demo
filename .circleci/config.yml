@@ -94,6 +94,11 @@ workflows:
           type: approval
           requires:
             - build-staging-release
+          filters:
+              branches:
+                ignore: /.*/
+              tags: 
+                only: /^staging-release.*/
       - deploy:
           name: deploy-staging        
           env: staging
