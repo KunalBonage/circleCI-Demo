@@ -85,7 +85,7 @@ workflows:
             branches:
               ignore: /.*/                        
             tags:
-              only: /^staging-release*/
+              only: /^staging-release.*/
       - deploy:
           name: deploy-staging        
           env: staging
