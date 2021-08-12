@@ -1,0 +1,151 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@3.0.0
+commands:
+  reusable_test:
+    parameters: # parameters are at the job level
+      env:
+        type: string
+    steps:
+      - run:
+          name: build and print
+          command: |
+            npm run build
+            echo << parameters.env >>
+jobs:
+  build:
+    parameters: # parameters are at the job level
+      env:
+        type: string
+    docker:
+      - image: cimg/node:15.1     
+    working_directory: ~/project # ~/ refers to /home/circleci
+    # The user-provided path /home/circleci/project
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: ~/project/node_modules/.bin/env-cmd -f .env.<<parameters.env>> npm run build
+      - run: npm test
+      # Below block to check the multiline commands
+      # - run:
+      #     name: build test and current environment check
+      #     command: |
+      #       npm run build
+      #       echo << parameters.env >>
+      #Below line for testing reusbale commands
+      - reusable_test:
+          env: << parameters.env >>
+      - run: # print the name of the branch we're on
+          name: "branch name"
+          command: echo ${CIRCLE_BRANCH}
+      - run:
+          name: "list folder structure"
+          command: ls -l
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+          - "build"
+  deploy:
+    parameters: # parameters are at the job level
+      env:
+        type: string
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - attach_workspace:
+          at: .
+      - run: npm install surge
+      - run: ls -l
+      - aws-s3/copy:
+          arguments: '--recursive'
+          from: ~/project/build
+          to: 's3://react-app-deployments'
+      - run: 
+          name: Invalidate Cloudfront Cache
+          command: aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT__DISTRIBUTION_ID} --paths /\*
+      # - run: ~/project/node_modules/.bin/surge --project ~/project/build --domain testCI-<< parameters.env >>.surge.sh
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          name: build-staging
+          env: staging
+          filters:
+            branches:
+              only: staging
+            tags:
+              ignore: /.*/       
+      - build:
+          name: build-prod
+          env: production
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/ 
+      - build:
+          name: build-staging-release
+          env: production
+          filters:
+            branches:
+              ignore: /.*/                        
+            tags:
+              only: /^staging-release.*/
+      - hold-prod:
+          type: approval
+          requires:
+            - build-prod
+      - hold-staging-release:
+          type: approval
+          requires:
+            - build-staging-release
+          filters:
+              branches:
+                ignore: /.*/
+              tags: 
+                only: /^staging-release.*/
+      - deploy:
+          name: deploy-staging        
+          env: staging
+          requires:
+            - build-staging
+          filters:
+            branches:
+              only: staging
+            tags:
+              ignore: /.*/
+      - deploy:
+          name: deploy-prod        
+          env: production
+          requires:
+            - hold-prod
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
+      - deploy:
+          name: staging-release       
+          env: production
+          requires:
+            - hold-staging-release
+          filters:
+              branches:
+                ignore: /.*/
+              tags: 
+                only: /^staging-release.*/
