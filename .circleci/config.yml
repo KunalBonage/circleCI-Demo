@@ -4,22 +4,30 @@ jobs:
   build:
     docker: 
       - image: cimg/node:15.1
+    parameters:
+      env: 
+        type: string
     steps:
       - run: echo build
   deploy:
     docker: 
       - image: cimg/node:15.1
+    parameters:
+      env: 
+        type: string
     steps:
-      - run: echo deploy
+      - run: echo deploy << parameters.env >>
 
 workflows:
   build_QA:
     jobs:
-      - build
+      - build:
+          env: QA
       - hold-deploy:
           type: approval
           requires:
             - build
       - deploy:
+          env: QA
           requires:
             - hold-deploy
