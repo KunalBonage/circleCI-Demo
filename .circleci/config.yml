@@ -28,10 +28,12 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: ~/project/node_modules/.bin/env-cmd -f .env.<<parameters.env>> npm run build
-      - run: npm test
+      # - run: npm test
       - run:
-          name: current environment check
-          command: echo << parameters.env >>
+          name: build test and current environment check
+          command: |
+            npm run build
+            echo << parameters.env >>
       - run: # print the name of the branch we're on
           name: "branch name"
           command: echo ${CIRCLE_BRANCH}
