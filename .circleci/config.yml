@@ -5,9 +5,17 @@ jobs:
     docker: 
       - image: cimg/node:15.1
     steps:
-      - run: echo Hi
+      - run: echo build
+  deploy:
+    docker: 
+      - image: cimg/node:15.1
+    steps:
+      - run: echo deploy
 
 workflows:
   build_QA:
     jobs:
       - build
+      - deploy:
+          - requires:
+              - build
