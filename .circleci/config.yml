@@ -22,8 +22,9 @@ jobs:
       env:
         type: string
     docker:
-      - image: cimg/node:15.1
-    working_directory: ~/project
+      - image: cimg/node:15.1     
+    working_directory: ~/project # ~/ refers to /home/circleci
+    # The user-provided path /home/circleci/project
     steps:
       - checkout
       # Download and cache dependencies
@@ -57,7 +58,7 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths:
-          - "node_modules"
+          - "build"
   deploy:
     parameters: # parameters are at the job level
       env:
