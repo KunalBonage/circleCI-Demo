@@ -57,7 +57,7 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths:
-          - "*"
+          - "build"
   deploy:
     parameters: # parameters are at the job level
       env:
