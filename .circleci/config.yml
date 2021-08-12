@@ -51,6 +51,9 @@ jobs:
       - run: # print the name of the branch we're on
           name: "branch name"
           command: echo ${CIRCLE_BRANCH}
+      - run:
+          name: "list folder structure"
+          command: ls -l
       - persist_to_workspace:
           root: ~/project
           paths:
