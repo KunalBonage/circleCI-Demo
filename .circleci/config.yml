@@ -16,7 +16,7 @@ workflows:
   build_QA:
     jobs:
       - build
-      - hold-deploy
+      - hold-deploy:
           type: approval
           requires:
             - build
