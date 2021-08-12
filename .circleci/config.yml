@@ -5,8 +5,18 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@3.0.0
+commands:
+  reusable_test:
+    parameters: # parameters are at the job level
+      env:
+        type: string
+    steps:
+      - run:
+          name: build and print
+          command: |
+            npm run build
+            echo << parameters.env >>
 jobs:
-  # Sample build task
   build:
     parameters: # parameters are at the job level
       env:
@@ -28,12 +38,16 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: ~/project/node_modules/.bin/env-cmd -f .env.<<parameters.env>> npm run build
-      # - run: npm test
-      - run:
-          name: build test and current environment check
-          command: |
-            npm run build
-            echo << parameters.env >>
+      - run: npm test
+      # Below block to check the multiline commands
+      # - run:
+      #     name: build test and current environment check
+      #     command: |
+      #       npm run build
+      #       echo << parameters.env >>
+      #Below line for testing reusbale commands
+      - reusable_test:
+          env: << parameters.env >>
       - run: # print the name of the branch we're on
           name: "branch name"
           command: echo ${CIRCLE_BRANCH}
