@@ -153,11 +153,12 @@ workflows:
           type: approval
           requires: 
             - build
-          branches:
-            ignore: /.*/
-          tags:
-            only: 
-              - /^feature/review/.*/          
+          filters:            
+            branches:
+              ignore: /.*/
+            tags:
+              only: 
+                - /^feature/review/.*/          
       - deploy-feature-review:
           requires: 
             - deploy-approval
