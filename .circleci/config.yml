@@ -118,11 +118,14 @@ jobs:
     docker:
       - image: cimg/node:15.1
     working_directory: ~/project # ~/ refers to /home/circleci
+    parameters:
+      name: env
+      type: string
     steps:
       - checkout
       - run: npm install
       - run: npm run test
-      - run: npm run build
+      - run: ~/project/node_modules/.bin/env-cmd -f  .env.<<parameters.env>> npm run build
       - run: cp build/index.html build/200.html
       - persist_to_workspace:
           root: ~/project
@@ -143,6 +146,7 @@ workflows:
   build_deploy_review:
     jobs:
       - build:
+          env: staging
           filters:
             branches:
               ignore: /.*/
