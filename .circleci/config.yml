@@ -120,6 +120,7 @@ jobs:
     working_directory: ~/project # ~/ refers to /home/circleci
     steps:
       - checkout
+      - run: npm install
       - run: npm run test
       - run: npm run build
       - run: cp build/index.html build/200.html
