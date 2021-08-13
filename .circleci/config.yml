@@ -119,13 +119,13 @@ jobs:
       - image: cimg/node:15.1
     working_directory: ~/project # ~/ refers to /home/circleci
     steps:
-      - persist_to_workspace:
-          root: ~/project
-          paths: "build"
       - checkout
       - run: npm run test
       - run: npm run build
       - run: cp build/index.html build/200.html
+      - persist_to_workspace:
+          root: ~/project
+          paths: "build"
   deploy-feature-review:
     docker:
       - image: cimg/node:15.1
