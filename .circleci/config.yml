@@ -119,8 +119,8 @@ jobs:
       - image: cimg/node:15.1
     working_directory: ~/project # ~/ refers to /home/circleci
     parameters:
-      name: env
-      type: string
+      env:
+        type: string
     steps:
       - checkout
       - run: npm install
