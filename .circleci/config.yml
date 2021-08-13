@@ -4,11 +4,16 @@ jobs:
   build:
     docker: 
       - image: cimg/node:15.1
+    working_directory: ~/project
     parameters:
       env: 
         type: string
     steps:
-      - run: echo build
+      - run: echo build > build.txt
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - '*'
   deploy:
     docker: 
       - image: cimg/node:15.1
@@ -16,7 +21,13 @@ jobs:
       env: 
         type: string
     steps:
-      - run: echo deploy << parameters.env >>
+      - attach_workspace:
+          at: .
+      - run: 
+          name: deploy build
+          command: |
+            echo deploy << parameters.env >>
+            cat build.txt
 
 workflows:
   build_QA:
