@@ -153,6 +153,8 @@ workflows:
           type: approval
           requires: 
             - build
+          branches:
+            ignore: /.*/
           tags:
             only: 
               - /^feature/review/.*/          
