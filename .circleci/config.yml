@@ -1,6 +1,14 @@
 version: 2.1
 
+orbs:
+  aws-s3: circleci/aws-s3@3.0.0
+  
 jobs:
+  quality_checks:
+    docker: 
+      - image: cimg/node:15.1
+    steps:
+      run: echo in quality checks
   build:
     docker: 
       - image: cimg/node:15.1
@@ -32,13 +40,23 @@ jobs:
 workflows:
   build_QA:
     jobs:
+      - quality_checks
       - build:
           env: QA
+          requires:
+            - quality_checks
+          filters:
+            branches:
+              - master
+              - staging
       - hold-deploy:
           type: approval
           requires:
             - build
       - deploy:
           env: QA
+          branches:
+            - master
+            - staging
           requires:
             - hold-deploy
