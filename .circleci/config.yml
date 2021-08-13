@@ -117,10 +117,10 @@ jobs:
   build:
     docker:
       - image: cimg/node:15.1
-    working_directory: ~/repo
+    working_directory: ~/project # ~/ refers to /home/circleci
     steps:
       - persist_to_workspace:
-          root: ~/repo
+          root: ~/project
           paths: "build"
       - checkout
       - run: npm run test
@@ -136,7 +136,7 @@ jobs:
           name: Install surge and deploy to surge
           command: |
             npm install surge
-            ~/repo/node_modules/.bin/surge --project build/ --domain ci-01-demo.sh
+            ~/project/node_modules/.bin/surge --project build/ --domain ci-01-demo.sh
 
 workflows:
   build_deploy_review:
