@@ -153,6 +153,9 @@ workflows:
           type: approval
           requires: 
             - build
+          tags:
+            only: 
+              - /^feature/review/.*/          
       - deploy-feature-review:
           requires: 
             - deploy-approval
