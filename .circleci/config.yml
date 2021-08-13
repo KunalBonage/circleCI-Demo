@@ -137,7 +137,7 @@ jobs:
           name: Install surge and deploy to surge
           command: |
             npm install surge
-            ~/project/node_modules/.bin/surge --project build/ --domain ci-01-demo.sh
+            ~/project/node_modules/.bin/surge --project build/ --domain ci-01-demo.surge.sh
 
 workflows:
   build_deploy_review:
