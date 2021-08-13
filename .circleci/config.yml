@@ -120,7 +120,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - persist_to_workspace:
-          root: ~/repo
+          root: .
           paths: "build"
       - checkout
       - run: npm run test
