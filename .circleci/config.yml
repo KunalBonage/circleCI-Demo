@@ -116,11 +116,11 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/node:15.0.1-browsers
+      - image: cimg/node:15.1
     working_directory: ~/repo
     steps:
       - persist_to_workspace:
-          root: .
+          root: ~/repo
           paths: "build"
       - checkout
       - run: npm run test
@@ -128,7 +128,7 @@ jobs:
       - run: cp build/index.html build/200.html
   deploy-feature-review:
     docker:
-      - image: cimg/node:15.0.1-browsers
+      - image: cimg/node:15.1
     steps:
       - attach_workspace:
           at: .
