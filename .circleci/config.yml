@@ -147,8 +147,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: 
-                - /^feature/review/.*/
+              only: /^feature/review/.*/
       - deploy-approval:
           type: approval
           requires: 
@@ -157,16 +156,13 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: 
-                - /^feature/review/.*/          
+              only: /^feature/review/.*/          
       - deploy-feature-review:
           requires: 
             - deploy-approval
           filters:
             branches:
-              ignore: 
-                - /.*/
+              ignore: /.*/
             tags:
-              only: 
-                - /^feature/review/.*/
+              only: /^feature/review/.*/
     
