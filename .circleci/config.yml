@@ -244,8 +244,8 @@ workflows:
                 /.*/
             tags:
               only:
-                /^production-release.*/
-                /^production-deploy.*/
+                - /^production-release.*/
+                - /^production-deploy.*/
       - hold-for-approval:
           type: approval
           requires:
@@ -256,8 +256,8 @@ workflows:
                 /.*/
             tags:
               only:
-                /^production-release.*/
-                /^production-deploy.*/
+                - /^production-release.*/
+                - /^production-deploy.*/
       - deploy:
           name: deploy_QA
           env: qa      
@@ -279,8 +279,8 @@ workflows:
               ignore: /.*/
             tags:
               only:
-                /^production-release.*/
-                /^production-deploy.*/
+                - /^production-release.*/
+                - /^production-deploy.*/
 
 
 
