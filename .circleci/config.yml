@@ -186,7 +186,7 @@ jobs:
           name: 'build app'
           command: |
             npm install
-            ~/projects/node_modules/.bin/env-cmd -f .env.<< parameters.env >>npm run build
+            ~/projects/node_modules/.bin/env-cmd -f .env.<< parameters.env >> npm run build
       - persist_to_workspace:
           root: ~/project
           paths: build
@@ -208,7 +208,7 @@ workflows:
     jobs:
       - build:
           name: "build_QA"
-          env: QA
+          env: qa
           filters:
             branches:
               only:
@@ -229,7 +229,7 @@ workflows:
                 /.*/
       - deploy:
           name: "deploy_QA"
-          env: QA      
+          env: qa      
           requires:
             - hold-for-approval
           filters:
