@@ -171,8 +171,9 @@
 #               only: /^feature/review/.*/
     
 version: 2.1
+
 orbs:
-  aws-s3: cirecleci/aws-s3@3.0
+  aws-s3: circleci/aws-s3@3.0.0
 
 jobs:
   build:
@@ -218,6 +219,9 @@ jobs:
           arguments: '--recursive'
           from: '~/project/build'
           to: 's3://react-app-deployments'
+      - run: 
+          name: Invalidate Cloudfront Cache
+          command: aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT__DISTRIBUTION_ID} --paths /\*
 workflows:
   build-and-deploy:
     jobs:
