@@ -9,8 +9,8 @@
 #       - image: cimg/node:15.1
 #     steps:
 #       - run: echo in quality checks
-#   build:
 #     docker: 
+#   build:
 #       - image: cimg/node:15.1
 #     working_directory: ~/project
 #     parameters:
@@ -176,6 +176,10 @@ jobs:
   build:
     docker:
       - image: cimg/node:15.1
+    working_directory: ~/repo
+    parameters:
+      env:
+        type: string
     steps: 
       - checkout
       - run: 
@@ -183,7 +187,57 @@ jobs:
           command: |
             npm install
             npm run build
+      - persist_to_workspace:
+          root: ~/repo
+          paths: build
+  deploy_qa:
+    docker:
+      - image: cimg/node:15.1
+    parameters:
+      env:
+        type: string
+    steps:
+      - attach_workspace:
+         at: .
+      - run: npx surge --project ~/repo/build --domain testCI<< parameters.env >>.surge.sh
+      - run: 
+          name: print env name
+          command: echo << parameters.env >>
 workflows:
   build-and-deploy:
     jobs:
-      - build
+      - build:
+          name: "build_QA"
+          env: QA
+          filters:
+            branches:
+              only:
+                master
+            tags:
+              ignore:
+                /.*/
+      - hold-for-approval:
+          type: approval
+          requires:
+            - build_QA
+          filters:
+            branches:
+              only:
+                master
+            tags:
+              ignore:
+                /.*/
+      - deploy_qa:
+          name: "deploy_QA"
+          env: QA      
+          requires:
+            - hold-for-approval
+          filters:
+            branches:
+              only:
+                master
+            tags:
+              ignore:
+                /.*/      
+
+
