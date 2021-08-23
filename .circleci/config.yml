@@ -111,62 +111,79 @@
 #               ignore: /.*/
 
 
+# version: 2.1
+
+# jobs:
+#   build:
+#     docker:
+#       - image: cimg/node:15.1
+#     working_directory: ~/project # ~/ refers to /home/circleci
+#     parameters:
+#       env:
+#         type: string
+#     steps:
+#       - checkout
+#       - run: npm install
+#       - run: npm run test
+#       - run: ~/project/node_modules/.bin/env-cmd -f  .env.<<parameters.env>> npm run build
+#       - run: cp build/index.html build/200.html
+#       - persist_to_workspace:
+#           root: ~/project
+#           paths: "build"
+#   deploy-feature-review:
+#     docker:
+#       - image: cimg/node:15.1
+#     steps:
+#       - attach_workspace:
+#           at: .
+#       - run: 
+#           name: Install surge and deploy to surge
+#           command: |
+#             npm install surge
+#             ~/project/node_modules/.bin/surge --project build/ --domain ci-01-demo.surge.sh
+
+# workflows:
+#   build_deploy_review:
+#     jobs:
+#       - build:
+#           env: staging
+#           filters:
+#             branches:
+#               ignore: /.*/
+#             tags:
+#               only: /^feature/review/.*/
+#       - deploy-approval:
+#           type: approval
+#           requires: 
+#             - build
+#           filters:            
+#             branches:
+#               ignore: /.*/
+#             tags:
+#               only: /^feature/review/.*/          
+#       - deploy-feature-review:
+#           requires: 
+#             - deploy-approval
+#           filters:
+#             branches:
+#               ignore: /.*/
+#             tags:
+#               only: /^feature/review/.*/
+    
 version: 2.1
 
 jobs:
   build:
     docker:
       - image: cimg/node:15.1
-    working_directory: ~/project # ~/ refers to /home/circleci
-    parameters:
-      env:
-        type: string
-    steps:
+    steps: 
       - checkout
-      - run: npm install
-      - run: npm run test
-      - run: ~/project/node_modules/.bin/env-cmd -f  .env.<<parameters.env>> npm run build
-      - run: cp build/index.html build/200.html
-      - persist_to_workspace:
-          root: ~/project
-          paths: "build"
-  deploy-feature-review:
-    docker:
-      - image: cimg/node:15.1
-    steps:
-      - attach_workspace:
-          at: .
       - run: 
-          name: Install surge and deploy to surge
+          name: 'build app'
           command: |
-            npm install surge
-            ~/project/node_modules/.bin/surge --project build/ --domain ci-01-demo.surge.sh
-
+            npm install
+            npm run build
 workflows:
-  build_deploy_review:
+  build-and-deploy:
     jobs:
-      - build:
-          env: staging
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^feature/review/.*/
-      - deploy-approval:
-          type: approval
-          requires: 
-            - build
-          filters:            
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^feature/review/.*/          
-      - deploy-feature-review:
-          requires: 
-            - deploy-approval
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^feature/review/.*/
-    
+      - build
