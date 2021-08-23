@@ -240,22 +240,18 @@ workflows:
           env: production
           filters:
             branches:
-              ignore:
-                /.*/
+              ignore: /.*/
             tags:
-              only:
-                - /^production-release.*/
+              only: /^production-release.*/
       - hold-for-approval:
           type: approval
           requires:
             - build_PROD
           filters:
             branches:
-              ignore:
-                /.*/
+              ignore: /.*/
             tags:
-              only:
-                - /^production-release.*/
+              only: /^production-release.*/
       - deploy:
           name: deploy_QA
           env: qa      
@@ -276,8 +272,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only:
-                - /^production-release.*/
+              only: /^production-release.*/
 
 
 
