@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {`Learn Cherrypick02 ${process.env.REACT_APP_ENV}`}
+          {`Learn 01 ${process.env.REACT_APP_ENV}`}
         </a>
       </header>
     </div>
