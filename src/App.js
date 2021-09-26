@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-         Branch cherrypick 02
+         Branch c1.1 commit
         </p>
         <a
           className="App-link"
