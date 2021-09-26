@@ -15,10 +15,10 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-        c3 first
+          C4 first commit
         </a>
       </header>
-      <main>C2 2nd commit</main>
+      <main>C4 first commit</main>
     </div>
   );
 }
