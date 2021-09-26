@@ -15,10 +15,10 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {`Learn c2 first commit ${process.env.REACT_APP_ENV}`}
+          C4 first commit
         </a>
       </header>
-      <main>C2 2nd commit</main>
+      <main>C4 first commit</main>
     </div>
   );
 }
