@@ -18,6 +18,7 @@ function App() {
           {`Learn c2 first commit ${process.env.REACT_APP_ENV}`}
         </a>
       </header>
+      <main>C2 2nd commit</main>
     </div>
   );
 }
