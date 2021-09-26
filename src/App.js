@@ -15,9 +15,10 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {`Learn 01 ${process.env.REACT_APP_ENV}`}
+          {`Learn c2 first commit ${process.env.REACT_APP_ENV}`}
         </a>
       </header>
+      <main>C2 2nd commit</main>
     </div>
   );
 }
